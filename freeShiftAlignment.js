@@ -82,7 +82,7 @@ for (var i = 0; i <= searchKey.length; ++i) { // rows
     }
     else {
       var values = 0;
-      if (searchKey[i] === searchText[j]) {
+      if (searchKey[i] === searchText[j-1]) {
         values = [scoreMatrix[i - 1][j] + gapPenalty,
           scoreMatrix[i][j - 1] + gapPenalty,
           scoreMatrix[i - 1][j - 1] + correctAlignment];
@@ -95,17 +95,19 @@ for (var i = 0; i <= searchKey.length; ++i) { // rows
         //console.log(values);
       }
 
-      var path = ["up", "left", "diag"];
+      var path = ["u", "l", "d"];
       scoreMatrix[i][j] = Math.max.apply(Math, values);
 
       var maxFromArray = Math.max.apply(Math, values);
       scorePath[i][j] = path[values.indexOf(maxFromArray)];
     }
+
+    console.log(searchKey[i] + " = " + searchText[j-1] + " = " + scoreMatrix[i][j]);
   }
 }
 
 
 print(scoreMatrix);
-//print(scorePath);
+print(scorePath);
 
 // TODO: Traceback
