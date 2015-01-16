@@ -16,11 +16,42 @@ catch (err) {
 
 function createTwoDimensionalArray(length) {
   var matrix = []
-  for (var i = 0; i < length.length; ++i) {
+  for (var i = 0; i <= length.length; ++i) {
     matrix.push([]);
   }
   return matrix;
 }
+
+function print(matrix){
+  console.log(matrix);
+
+  /*matrix.forEach(function(element, index){
+    console.log(element);
+  });*/
+}
+
+// Beispiel: SHOW ME ALL USER
+//           USER
+/*
+
+ [
+ [ [], [], ]
+ []
+ []
+ []
+ []
+ []
+ []
+ []
+ []
+ []
+ []
+ []
+ []
+ ]
+
+
+ */
 
 var searchText = process.argv[2].toUpperCase();
 var searchKey = process.argv[3].toUpperCase();
@@ -28,47 +59,53 @@ var searchKey = process.argv[3].toUpperCase();
 var gapPenalty = -1;
 var correctAlignment = +1;
 
-var scoreMatrix = createTwoDimensionalArray(searchText); // two dimensional array
-var scorePath = [];
-
+var scoreMatrix = createTwoDimensionalArray(searchKey); // two dimensional array
+var scorePath = createTwoDimensionalArray(searchKey);
 
 console.log("sentence: " + searchText);
 console.log("search: " + searchKey);
 
-for (var i = 0; i < searchKey.length - 1; ++i) { // rows
+for (var i = 0; i <= searchKey.length; ++i) { // rows
   if (i > 0) { // leftmost column
-    scoreMatrix.push(gapPenalty * i)
-    scorePath.push("u"); // up
+    scoreMatrix[i].push(gapPenalty * i);
+    scorePath[i].push("u"); // up
   }
   else { // top left corner
-    scoreMatrix.push(0);
-    scorePath.push("d"); // diagonal
+    scoreMatrix[i].push(0);
+    scorePath[i].push("d"); // diagonal
   }
 
-  for (var j = 0; j < searchText.length; ++j) { // columns
+  for (var j = 1; j <= searchText.length; ++j) { // columns
     if (i === 0) { // top row
-      scoreMatrix.push(0);
-      scorePath.push("l"); // left
+      scoreMatrix[i].push(0);
+      scorePath[i].push("l"); // left
     }
     else {
       var values = 0;
       if (searchKey[i] === searchText[j]) {
         values = [scoreMatrix[i - 1][j] + gapPenalty,
           scoreMatrix[i][j - 1] + gapPenalty,
-          scoreMatrix[i - 1][j - 1] - correctAlignment];
+          scoreMatrix[i - 1][j - 1] + correctAlignment];
+        //console.log(values);
       }
       else {
         values = [scoreMatrix[i - 1][j] + gapPenalty,
           scoreMatrix[i][j - 1] + gapPenalty,
-          scoreMatrix[i - 1][j - 1] + correctAlignment];
+          scoreMatrix[i - 1][j - 1] - correctAlignment];
+        //console.log(values);
       }
 
-      // push highest value
-      // scoreMatrix[i].push();
-      // find out from which direction we came
+      var path = ["up", "left", "diag"];
+      scoreMatrix[i][j] = Math.max.apply(Math, values);
 
+      var maxFromArray = Math.max.apply(Math, values);
+      scorePath[i][j] = path[values.indexOf(maxFromArray)];
     }
   }
 }
+
+
+print(scoreMatrix);
+//print(scorePath);
 
 // TODO: Traceback
