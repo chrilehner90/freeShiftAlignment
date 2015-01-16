@@ -35,11 +35,33 @@ console.log("sentence: " + searchText);
 console.log("search: " + searchKey);
 
 for(var i = 0; i < searchKey.length - 1; ++i) {
-  if(i != 0) {
+  if(i > 0) { // leftmost column
+    scoreMatrix.push(gapPenalty * i)
+    scorePath.push("u"); // up
+  }
+  else { // top left corner
+    scoreMatrix.push(0);
+    scorePath.push("d"); // diagonal
+  }
+
+  for(var j = 0; j < searchText.length; ++j) {
+    if(i === 0) {
+      scoreMatrix.push(0);
+      scorePath.push("l"); // left
+    }
+    else {
+      
+    }
+
+  }
+
+
+
+  /*if(i != 0) {
     scoreMatrix.push(gapPenalty * i);
     scorePath.push("up");
   }
   else {
 
-  }
+  }*/
 }
