@@ -2,7 +2,6 @@ try {
   if(process.argv[2] === undefined || process.argv[3] === undefined) {
     throw "\nNo or not all arguments given:"
   }
-  else if()
 }
 catch(err) {
   console.log(err + "\n\tUsage: node [scriptname] [sentence] [searchKey]\n");
