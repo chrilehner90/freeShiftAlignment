@@ -26,6 +26,7 @@ var searchText = process.argv[2].toUpperCase();
 var searchKey = process.argv[3].toUpperCase();
 
 var gapPenalty = -1;
+var correctAlignment = +1;
 
 var scoreMatrix = createTwoDimensionalArray(searchText); // two dimensional array
 var scorePath = [];
@@ -34,8 +35,8 @@ var scorePath = [];
 console.log("sentence: " + searchText);
 console.log("search: " + searchKey);
 
-for(var i = 0; i < searchKey.length - 1; ++i) {
-  if(i > 0) { // leftmost column
+for(var i = 0; i < searchKey.length - 1; ++i) { // rows
+  if (i > 0) { // leftmost column
     scoreMatrix.push(gapPenalty * i)
     scorePath.push("u"); // up
   }
@@ -44,24 +45,25 @@ for(var i = 0; i < searchKey.length - 1; ++i) {
     scorePath.push("d"); // diagonal
   }
 
-  for(var j = 0; j < searchText.length; ++j) {
-    if(i === 0) {
+  for(var j = 0; j < searchText.length; ++j) { // columns
+    if (i === 0) { // top row
       scoreMatrix.push(0);
       scorePath.push("l"); // left
     }
     else {
-      
+      var values = 0;
+      if (searchKey[i] === searchText[j]) {
+        values = [ scoreMatrix[i - 1][j - j] + correctAlignment, scoreMatrix[i - 1][j] + correctAlignment, scoreMatrix[i - 1][j - 1] + correctAlignment ];
+      }
+      else {
+        values = [ scoreMatrix[i - 1][j - j] - gapPenalty, scoreMatrix[i - 1][j] + gapPenalty, scoreMatrix[i - 1][j - gapPenalty] + 1 ];
+      }
+      // push highest value
+      // scoreMatrix[i].push();
+      // find out from which direction we came
+
     }
-
   }
-
-
-
-  /*if(i != 0) {
-    scoreMatrix.push(gapPenalty * i);
-    scorePath.push("up");
-  }
-  else {
-
-  }*/
 }
+
+// TODO: Traceback
