@@ -1,22 +1,22 @@
 /*
-Algorithms for the Social Web, Task 7
-Wanko, Lehner
+ Algorithms for the Social Web, Task 7
+ Wanko, Lehner
  */
 
 
 try {
-  if(process.argv[2] === undefined || process.argv[3] === undefined) {
+  if (process.argv[2] === undefined || process.argv[3] === undefined) {
     throw "\nNo or not all arguments given."
   }
 }
-catch(err) {
+catch (err) {
   console.log(err + "\n\tUsage: node [scriptname] [sentence] [searchKey]\n");
   process.exit(1); // failure
 }
 
 function createTwoDimensionalArray(length) {
   var matrix = []
-  for(var i = 0; i < length.length; ++i) {
+  for (var i = 0; i < length.length; ++i) {
     matrix.push([]);
   }
   return matrix;
@@ -35,7 +35,7 @@ var scorePath = [];
 console.log("sentence: " + searchText);
 console.log("search: " + searchKey);
 
-for(var i = 0; i < searchKey.length - 1; ++i) { // rows
+for (var i = 0; i < searchKey.length - 1; ++i) { // rows
   if (i > 0) { // leftmost column
     scoreMatrix.push(gapPenalty * i)
     scorePath.push("u"); // up
@@ -45,7 +45,7 @@ for(var i = 0; i < searchKey.length - 1; ++i) { // rows
     scorePath.push("d"); // diagonal
   }
 
-  for(var j = 0; j < searchText.length; ++j) { // columns
+  for (var j = 0; j < searchText.length; ++j) { // columns
     if (i === 0) { // top row
       scoreMatrix.push(0);
       scorePath.push("l"); // left
@@ -53,11 +53,16 @@ for(var i = 0; i < searchKey.length - 1; ++i) { // rows
     else {
       var values = 0;
       if (searchKey[i] === searchText[j]) {
-        values = [ scoreMatrix[i - 1][j - j] + correctAlignment, scoreMatrix[i - 1][j] + correctAlignment, scoreMatrix[i - 1][j - 1] + correctAlignment ];
+        values = [scoreMatrix[i - 1][j] + gapPenalty,
+          scoreMatrix[i][j - 1] + gapPenalty,
+          scoreMatrix[i - 1][j - 1] - correctAlignment];
       }
       else {
-        values = [ scoreMatrix[i - 1][j - j] - gapPenalty, scoreMatrix[i - 1][j] + gapPenalty, scoreMatrix[i - 1][j - gapPenalty] + 1 ];
+        values = [scoreMatrix[i - 1][j] + gapPenalty,
+          scoreMatrix[i][j - 1] + gapPenalty,
+          scoreMatrix[i - 1][j - 1] + correctAlignment];
       }
+
       // push highest value
       // scoreMatrix[i].push();
       // find out from which direction we came
