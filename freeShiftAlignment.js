@@ -1,12 +1,17 @@
-var searchText = "Show me all users which own a pet";
-var searchKey = "";
+process.argv.forEach(function(val, index, array) {
+  console.log(index + ": " + val)
+})
+
+var searchText = process.argv[2].toLowerCase();
+var searchKey = process.argv[3].toLowerCase();
 var gapPenalty = -1;
 
 var scoreMatrix = [];
 var scorePath = [];
 
-searchText.toLowerCase();
-searchKey.toLowerCase();
 
 console.log("sentence: " + searchText);
+console.log("search: " + searchKey);
+
+
 
