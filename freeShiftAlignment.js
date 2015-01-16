@@ -1,7 +1,8 @@
 try {
   if(process.argv[2] === undefined || process.argv[3] === undefined) {
-    throw "\nNo arguments given:"
+    throw "\nNo or not all arguments given:"
   }
+  else if()
 }
 catch(err) {
   console.log(err + "\n\tUsage: node [scriptname] [sentence] [searchKey]\n");
@@ -20,7 +21,6 @@ var scorePath = [];
 console.log("sentence: " + searchText);
 console.log("search: " + searchKey);
 
-console.log(searchText.length)
 for(var i = 0; i < searchText.length - 1; i++) {
 
 }
