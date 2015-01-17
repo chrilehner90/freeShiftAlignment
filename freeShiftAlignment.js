@@ -3,6 +3,104 @@
  Wanko, Lehner
  */
 
+var identifiers = [
+  "about",
+  "age_range",
+  "bio",
+  "birthday",
+  "/mutual_friends",
+  "/mutual_likes",
+  "cover",
+  "user_currency",
+  "usd_exchange",
+  "usd_exchange_inverse",
+  "currency_offset",
+  "devices",
+  "hardware",
+  "os",
+  "education",
+  "school",
+  "year",
+  "concentration",
+  "type",
+  "email",
+  "favorite_athletes",
+  "favorite_teams",
+  "first_name",
+  "gender",
+  "hometown",
+  "inspirational_people",
+  "is_verified",
+  "languages",
+  "last_name",
+  "link",
+  "locale",
+  "location",
+  "middle_name",
+  "name",
+  "political",
+  "quotes",
+  "relationship_status",
+  "religion",
+  "significant_other",
+  "timezone",
+  "verified",
+  "website",
+  "work",
+  "employer",
+  "location",
+  "position",
+  "start_date",
+  "end_date",
+  "projects",
+  "with",
+  "description",
+  "start_date",
+  "end_date",
+  "/accounts",
+  "/achievements",
+  "/activities",
+  "/adaccounts",
+  "/albums",
+  "/applications/developer",
+  "/apprequests",
+  "/books",
+  "/events",
+  "/events/attending",
+  "/events/created",
+  "/events/maybe",
+  "/events/not_replied",
+  "/events/declined",
+  "/family",
+  "/feed",
+  "/friendlists",
+  "/friends",
+  "/games",
+  "/groups",
+  "/interests",
+  "/invitable_friends",
+  "/likes",
+  "/links",
+  "/movies",
+  "/music",
+  "/notifications",
+  "/outbox",
+  "/payment_transactions",
+  "/payments",
+  "/picture",
+  "/photos",
+  "/photos/uploaded",
+  "/pokes",
+  "/posts",
+  "/scores",
+  "/statuses",
+  "/taggable_friends",
+  "/tagged",
+  "/tagged_places",
+  "/television",
+  "/videos",
+  "/videos/uploaded"
+];
 
 try {
   if (process.argv[2] === undefined || process.argv[3] === undefined) {
@@ -21,37 +119,6 @@ function createTwoDimensionalArray(length) {
   }
   return matrix;
 }
-
-function print(matrix){
-  console.log(matrix);
-
-  /*matrix.forEach(function(element, index){
-    console.log(element);
-  });*/
-}
-
-// Beispiel: SHOW ME ALL USER
-//           USER
-/*
-
- [
- [ [], [], ]
- []
- []
- []
- []
- []
- []
- []
- []
- []
- []
- []
- []
- ]
-
-
- */
 
 var searchText = process.argv[2].toUpperCase();
 var searchKey = process.argv[3].toUpperCase();
@@ -82,17 +149,16 @@ for (var i = 0; i <= searchKey.length; ++i) { // rows
     }
     else {
       var values = 0;
-      if (searchKey[i] === searchText[j-1]) {
+
+      if (searchKey[i - 1] === searchText[j - 1]) {
         values = [scoreMatrix[i - 1][j] + gapPenalty,
           scoreMatrix[i][j - 1] + gapPenalty,
           scoreMatrix[i - 1][j - 1] + correctAlignment];
-        //console.log(values);
       }
       else {
         values = [scoreMatrix[i - 1][j] + gapPenalty,
           scoreMatrix[i][j - 1] + gapPenalty,
           scoreMatrix[i - 1][j - 1] - correctAlignment];
-        //console.log(values);
       }
 
       var path = ["u", "l", "d"];
@@ -101,13 +167,40 @@ for (var i = 0; i <= searchKey.length; ++i) { // rows
       var maxFromArray = Math.max.apply(Math, values);
       scorePath[i][j] = path[values.indexOf(maxFromArray)];
     }
-
-    console.log(searchKey[i] + " = " + searchText[j-1] + " = " + scoreMatrix[i][j]);
   }
 }
 
+console.log(scoreMatrix);
+console.log(scorePath);
 
-print(scoreMatrix);
-print(scorePath);
+var maxValue = Math.max.apply(Math, scoreMatrix[scoreMatrix.length - 1]);
+var maxValueIdx = scoreMatrix[scoreMatrix.length - 1].indexOf(maxValue);
 
-// TODO: Traceback
+var i = searchKey.length;
+var j = maxValueIdx
+
+var alignment = ["", ""];
+for (var k = 0; k < searchText.length - j; ++k) {
+  alignment[0] += "-";
+}
+alignment[1] = searchText.slice(j);
+
+while (i > 0 || j > 0) {
+  if (scorePath[i][j] == "d") {
+    i--;
+    j--;
+    alignment[0] = searchKey[i] + alignment[0];
+    alignment[1] = searchText[j] + alignment[1];
+  } else if (scorePath[i][j] == "u") {
+    i--;
+    alignment[0] = searchKey[i] + alignment[0];
+    alignment[1] = "-" + alignment[1];
+  } else if (scorePath[i][j] == "l") {
+    j--;
+    alignment[0] = "-" + alignment[0];
+    alignment[1] = searchText[j] + alignment[1];
+  }
+}
+
+console.log(alignment[0]);
+console.log(alignment[1]);
